@@ -1,0 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&display=swap");
+:root {
+  --hue: 200;
+
+  --background-color: #000000;
+
+  --primary-color: #166088;
+  --primary-color-dark: #4A6FA5;
+  --primary-color-light: #C0D6DF;
+
+  --secondary-color: hsl(var(--hue) 25% 25%);
+  --secondary-color-dark: hsl(var(--hue) 15% 15%);
+  --secondary-color-light: #DBE9EE;
+
+  --acc-color: #3062ce;
+  --acc-color-dark: hsl(var(--hue) 90% 35%);
+  --acc-color-light: hsl(var(--hue) 90% 60%);
+
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  font: 1em/1.5 "Montserrat";
+  background-color: var(--background-color);
+  color: var(--secondary-color-light);
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: var(--secondary-color);
+}
+
+img,
+svg {
+  vertical-align: middle;
+}
+
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+}
