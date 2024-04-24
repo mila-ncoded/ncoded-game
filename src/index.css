@@ -27,7 +27,6 @@
 
 body {
   font: 1em/1.5 "Montserrat";
-  background-color: var(--background-color);
   color: var(--secondary-color-light);
   margin: 0;
 }
