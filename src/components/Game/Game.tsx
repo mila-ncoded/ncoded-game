@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import GameGrid from "../GameGrid/GameGrid.page";
 import ScoreCard from "../ScoreCard/ScoreCard";
-import Constants from "../../utils/constants";
 import Button from "../Button/Button.component";
 import StartScreen from "../StartScreen/StartScreen.page";
+
 import "./Game.styles.scss";
 
 type GameProps = {
@@ -60,7 +60,6 @@ const Game = ({ gameDuration }: GameProps) => {
         <StartScreen
           score={score}
           onStartGame={startGame}
-          duration={Constants.gameDuration}
         />
       )}
       {gameStarted && !gameStopped && (
@@ -68,8 +67,14 @@ const Game = ({ gameDuration }: GameProps) => {
           <div className="game-nav">
             <h1 className="game-title">Ncoded memory game</h1>
             <div className="game-settings">
-              <ScoreCard score={score} time={timeRemaining} />
-              <Button type={"alert"} onClick={stopGame} width="wide">
+              <ScoreCard
+                score={score}
+                time={timeRemaining}
+              />
+              <Button
+                type={"alert"}
+                onClick={stopGame}
+                width="wide">
                 Stop
               </Button>
             </div>

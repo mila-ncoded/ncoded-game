@@ -1,4 +1,9 @@
 .game-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
   &__remaining {
     img {
       width: 80px;

@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./GameGrid.styles.scss";
 import shuffle from "./utils/shuffle";
 import Constants from "../../utils/constants";
 import Card from "../Card/Card.component";
+
+import "./GameGrid.styles.scss";
 
 type CardState = {
   index: number | null;
@@ -29,10 +30,6 @@ const GameGrid = ({ setScore }: GameGridProps) => {
   const timer = useRef<NodeJS.Timer | number | null>(null);
 
   const handleClick = (index: number, value: number) => {
-    // if (timer.current !== null) {
-    //   clearTimeout(Number(timer.current));
-    // }
-
     if (
       firstCard.index === null ||
       (firstCard.index !== null && secondCard.index !== null)
@@ -45,7 +42,11 @@ const GameGrid = ({ setScore }: GameGridProps) => {
       setMoves((prev) => prev + 1);
 
       if (firstCard.value === value) {
-        setRemainingCards(remainingCards.filter((card) => card !== value));
+        setTimeout(
+          () =>
+            setRemainingCards(remainingCards.filter((card) => card !== value)),
+          500
+        );
       }
     }
   };
@@ -54,7 +55,7 @@ const GameGrid = ({ setScore }: GameGridProps) => {
     if (moves > -1) {
       setScore(Constants.gameCells - remainingCards.length);
     }
-  }, [moves]);
+  }, [moves, remainingCards.length, setScore]);
 
   useEffect(() => {
     if (
@@ -87,27 +88,14 @@ const GameGrid = ({ setScore }: GameGridProps) => {
       <div className="game-grid__cards-container">
         {allItems.map((item, index) => {
           return (
-            <Card 
+            <Card
               index={index}
               firstCardIndex={firstCard?.index}
               secondCardIndex={secondCard?.index}
               remainingCards={remainingCards}
               item={item}
               handleClick={handleClick}
-              />
-            // <div
-            //   key={index}
-            //   className={`card ${
-            //     (firstCard.index === index ||
-            //       secondCard.index === index ||
-            //       !remainingCards.includes(item)) &&
-            //     "flipped"
-            //   }`}
-            //   onClick={() => handleClick(index, item)}
-            // >
-            //   <div className="back-side"></div>
-            //   <img alt={`ncoded ${index}`} src={`ncoded${item}.png`} />
-            // </div>
+            />
           );
         })}
       </div>
