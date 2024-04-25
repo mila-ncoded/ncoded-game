@@ -8,6 +8,10 @@
   --primary-color-dark: #4A6FA5;
   --primary-color-light: #C0D6DF;
 
+  --color-card: #1b1b1b;
+  --color-card-hover:#101010;
+  --color-box-shadow:#6b6b6b;
+
   --secondary-color: hsl(var(--hue) 25% 25%);
   --secondary-color-dark: hsl(var(--hue) 15% 15%);
   --secondary-color-light: #DBE9EE;

@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import shuffle from "./utils/shuffle";
 import Constants from "../../utils/constants";
-import Card from "../Card/Card.component";
 
 import "./GameGrid.styles.scss";
+import Card from "../Card";
 
 type CardState = {
   index: number | null;

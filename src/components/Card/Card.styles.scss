@@ -1,38 +1,83 @@
-.card {
-  background-color: rgb(3, 29, 48);
-  border: 1px solid grey;
-  width: 150px;
-  height: 200px;
-  display: grid;
-  align-items: center;
-  justify-content: center;
-  border-radius: 2px;
-  transition: all linear 0.3s;
-  transform: rotate3d(0, 1, 0, 180deg);
-  position: relative;
-  overflow: hidden;
+@import "src/scss/size.module.scss";
+@import "src/scss/flex.module.scss";
 
-  &:hover {
-    cursor: pointer;
-    transform: rotate3d(0, 1, 0, 180deg) translate(-2px, -2px);
-    filter: brightness(1.5);
-  }
-}
+.ng-cube {
+  @include size(150px);
 
-.card.flipped {
-  transform: unset;
+  animation: enter 500ms ease-out;
   transform-style: preserve-3d;
-  pointer-events: none;
-}
-
-.back-side {
-  background-color: rgb(3, 29, 48);
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  transform: rotateX(40deg);
+  transition: all 350ms ease-out;
   backface-visibility: hidden;
-}
 
-.flipped .back-side {
-  transform: rotate3d(0, 1, 0, 180deg);
+  &--flipped {
+    transform: rotateY(180deg) rotateX(-40deg) scale(1);
+    transition: all 500ms ease-out;
+    pointer-events: none;
+  }
+
+  &__side {
+    box-shadow: inset 0 0 2px 1px var(--color-box-shadow);
+    transform: rotateX(50deg) rotateZ(22deg);
+    backface-visibility: hidden;
+    overflow: hidden;
+    position: absolute;
+
+    &__front {
+      @include flex("column", "center", "center");
+      @include size(150px);
+
+      transition: background 500ms ease-out;
+      background-color: var(--color-card);
+      transform: translateZ(10px);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: var(--color-card-hover);
+      }
+    }
+
+    &__right {
+      @include size(20px, 150px);
+
+      transform: rotateY(90deg) translateZ(140px);
+      background-color: darken(#1b1b1b, 10%);
+    }
+
+    &__back {
+      @include size(150px);
+
+      transform: rotateY(180deg) translateZ(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--color-card);
+
+      img {
+        @include size(130px);
+      }
+    }
+
+    &__left {
+      @include size(20px, 150px);
+
+      transform: rotateY(270deg) translateZ(10px);
+      background-color: darken(#1b1b1b, 10%);
+    }
+    &__up {
+      @include size(150px, 20px);
+
+      transform: rotateX(90deg) translateZ(10px);
+      background-color: darken(#1b1b1b, 10%);
+    }
+    &__down {
+      @include size(150px, 20px);
+
+      transform: rotateX(-90deg) translateZ(140px);
+      background-color: darken(#1b1b1b, 10%);
+    }
+  }
 }
