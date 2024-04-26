@@ -1,19 +1,18 @@
-.game-container {
-    padding-top: 3em;
-  min-height: 100vh;
-}
+@import "src/scss/breakpoints.module.scss";
 
 .game-nav {
-  padding: 1.5em 2em;
+  padding: 2em 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
+  button {
+    font-size: 1rem;
+    width: 100px;
+  }
 
-.game-settings {
-  display: flex;
-  gap: 1em;
-  align-items: center;
+  @include sm-breakpoint {
+    padding: 1em 0 1em 0.5em;
+  }
 }
 
 .game-title {
@@ -23,4 +22,11 @@
 
 .game-intro-title {
   margin: 0;
+}
+
+.game-container {
+  @include sm-breakpoint {
+    position: fixed;
+    overflow: hidden;
+  }
 }

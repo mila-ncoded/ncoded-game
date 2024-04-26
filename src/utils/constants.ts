@@ -1,6 +1,6 @@
 const Constants = {
-  gameDuration: 60,
-  gameCells: 8,
+  gameDuration: 270,
+  gameCells: 12,
 };
 
 export default Constants;

@@ -1,17 +1,23 @@
 @import "src/scss/size.module.scss";
 @import "src/scss/flex.module.scss";
+@import "src/scss/breakpoints.module.scss";
 
 .ng-cube {
   @include size(150px);
 
   animation: enter 500ms ease-out;
   transform-style: preserve-3d;
-  transform: rotateX(40deg);
+  // transform: rotateX(40deg);
   transition: all 350ms ease-out;
   backface-visibility: hidden;
 
+  @include sm-breakpoint {
+    @include size(100px);
+  }
+
   &--flipped {
-    transform: rotateY(180deg) rotateX(-40deg) scale(1);
+    // transform: rotateY(180deg) rotateX(-40deg) scale(1);
+    transform: rotateY(180deg) scale(1);
     transition: all 500ms ease-out;
     pointer-events: none;
   }
@@ -26,6 +32,9 @@
     &__front {
       @include flex("column", "center", "center");
       @include size(150px);
+      @include sm-breakpoint {
+        @include size(100px);
+      }
 
       transition: background 500ms ease-out;
       background-color: var(--color-card);
@@ -35,13 +44,27 @@
       align-items: center;
       justify-content: center;
 
+      img {
+        width: 150px;
+        @include sm-breakpoint {
+          @include size(100px);
+        }
+      }
+
       &:hover {
         background-color: var(--color-card-hover);
+        img {
+          filter: brightness(1.1);
+          transition: background 500ms ease-out;
+        }
       }
     }
 
     &__right {
       @include size(20px, 150px);
+      @include sm-breakpoint {
+        @include size(20px, 100px);
+      }
 
       transform: rotateY(90deg) translateZ(140px);
       background-color: darken(#1b1b1b, 10%);
@@ -49,6 +72,9 @@
 
     &__back {
       @include size(150px);
+      @include sm-breakpoint {
+        @include size(100px);
+      }
 
       transform: rotateY(180deg) translateZ(10px);
       display: flex;
@@ -63,18 +89,27 @@
 
     &__left {
       @include size(20px, 150px);
+      @include sm-breakpoint {
+        @include size(20px, 100px);
+      }
 
       transform: rotateY(270deg) translateZ(10px);
       background-color: darken(#1b1b1b, 10%);
     }
     &__up {
       @include size(150px, 20px);
+      @include sm-breakpoint {
+        @include size(100px, 20px);
+      }
 
       transform: rotateX(90deg) translateZ(10px);
       background-color: darken(#1b1b1b, 10%);
     }
     &__down {
       @include size(150px, 20px);
+      @include sm-breakpoint {
+        @include size(100px, 20px);
+      }
 
       transform: rotateX(-90deg) translateZ(140px);
       background-color: darken(#1b1b1b, 10%);
