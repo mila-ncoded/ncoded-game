@@ -1,15 +1,73 @@
+@import "src/scss/breakpoints.module.scss";
+
 .game-grid {
+  @include xs-breakpoint {
+    overflow: hidden;
+  }
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+
+  p {
+    font-size: 1.5rem;
+  }
+
+  &__header {
+    min-height: 25vh;
+    p {
+      font-size: 1.5rem;
+
+      @include sm-breakpoint {
+        font-size: 1rem;
+        padding-bottom: 8px;
+      }
+    }
+  }
+
   &__remaining {
     img {
       width: 80px;
+      @include sm-breakpoint {
+        width: 40px;
+      }
     }
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    padding-top: 16px;
-    min-height: 150px;
+
+    display: grid;
+    grid-template-columns: repeat(12, auto);
+    grid-template-rows: auto;
+    grid-gap: 16px;
+
+    @include lg-breakpoint {
+      grid-template-columns: repeat(6, auto);
+      grid-template-rows: repeat(2, auto);
+    }
+
+    @include sm-breakpoint {
+      grid-template-columns: repeat(6, auto);
+      grid-template-rows: repeat(4, auto);
+    }
+  }
+
+  &__cube {
+    min-height: 40vh;
+    position: relative; // Needed for absolute positioning of the shadow
+    &:before {
+      // Using a pseudo-element for the shadow
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      width: 100%;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 50%;
+      transform: translateX(-50%) scale(1, 0.5);
+      filter: blur(25px);
+      z-index: -1;
+    }
   }
 
   &__cards-container {
@@ -17,9 +75,87 @@
       width: 100px;
     }
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     justify-content: center;
-    gap: 10px;
     margin: 1em 0;
+    gap: 7px;
+  }
+
+  &__results {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 80px;
+    div {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.cube {
+  width: 320px;
+  height: 320px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(-30deg) rotateY(-45deg);
+  transition: transform 0.1s linear; // Smooth rotation
+  cursor: grab;
+
+  @include sm-breakpoint {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+.face {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-box-shadow);
+
+  @include sm-breakpoint {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+.front {
+  transform: translateZ(160px);
+  @include sm-breakpoint {
+    transform: translateZ(110px);
+  }
+}
+.back {
+  transform: rotateY(180deg) translateZ(160px);
+  @include sm-breakpoint {
+    transform: rotateY(180deg) translateZ(110px);
+  }
+}
+.right {
+  transform: rotateY(90deg) translateZ(160px);
+  @include sm-breakpoint {
+    transform: rotateY(90deg) translateZ(110px);
+  }
+}
+.left {
+  transform: rotateY(-90deg) translateZ(160px);
+  @include sm-breakpoint {
+    transform: rotateY(-90deg) translateZ(110px);
+  }
+}
+.top {
+  transform: rotateX(90deg) translateZ(160px);
+  @include sm-breakpoint {
+    transform: rotateX(90deg) translateZ(110px);
+  }
+}
+.bottom {
+  transform: rotateX(-90deg) translateZ(160px);
+  @include sm-breakpoint {
+    transform: rotateX(-90deg) translateZ(110px);
   }
 }

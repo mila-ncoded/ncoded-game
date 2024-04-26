@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import GameGrid from "../GameGrid/GameGrid.page";
 import ScoreCard from "../ScoreCard/ScoreCard";
-import Constants from "../../utils/constants";
 import Button from "../Button/Button.component";
 import StartScreen from "../StartScreen/StartScreen.page";
+
 import "./Game.styles.scss";
+import Cube from "../Cube/Cube";
 
 type GameProps = {
   gameDuration: number;
@@ -54,27 +55,24 @@ const Game = ({ gameDuration }: GameProps) => {
     setScore(value);
   };
 
+  const handleEndGame = () => {
+    stopGame();
+  }
+
   return (
     <div className="game-container">
       {(!gameStarted || gameStopped) && (
-        <StartScreen
-          score={score}
-          onStartGame={startGame}
-          duration={Constants.gameDuration}
-        />
+        <StartScreen score={score} onStartGame={startGame} />
       )}
       {gameStarted && !gameStopped && (
         <div>
           <div className="game-nav">
-            <h1 className="game-title">Ncoded memory game</h1>
-            <div className="game-settings">
-              <ScoreCard score={score} time={timeRemaining} />
-              <Button type={"alert"} onClick={stopGame} width="wide">
-                Stop
-              </Button>
-            </div>
+            <ScoreCard score={score} time={timeRemaining} />
+            <Button type={"alert"} onClick={stopGame} width="wide">
+              Stop
+            </Button>
           </div>
-          <GameGrid setScore={handleSetScore} />
+          <GameGrid setScore={handleSetScore} endGame={handleEndGame} />
         </div>
       )}
     </div>

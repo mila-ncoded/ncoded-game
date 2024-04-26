@@ -2,27 +2,27 @@
 :root {
   --hue: 200;
 
-  --background-color: #000000;
+  --background-color: #21334e;
 
   --primary-color: #166088;
-  --primary-color-dark: #4A6FA5;
-  --primary-color-light: #C0D6DF;
+  --primary-color-dark: #4a6fa5;
+  --primary-color-light: #c0d6df;
+
+  --color-card: #`;
+  --color-card-hover: #3a3a3a;
+  --color-box-shadow: #101010;
 
   --secondary-color: hsl(var(--hue) 25% 25%);
   --secondary-color-dark: hsl(var(--hue) 15% 15%);
-  --secondary-color-light: #DBE9EE;
+  --secondary-color-light: #dbe9ee;
 
   --acc-color: #3062ce;
   --acc-color-dark: hsl(var(--hue) 90% 35%);
   --acc-color-light: hsl(var(--hue) 90% 60%);
-
-  box-sizing: border-box;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
+* {
+  box-sizing: border-box;
 }
 
 body {

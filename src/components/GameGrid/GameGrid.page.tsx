@@ -1,8 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
-import "./GameGrid.styles.scss";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  MouseEvent,
+  useCallback,
+} from "react";
 import shuffle from "./utils/shuffle";
 import Constants from "../../utils/constants";
-import Card from "../Card/Card.component";
+
+import "./GameGrid.styles.scss";
+import Card from "../Card";
 
 type CardState = {
   index: number | null;
@@ -11,16 +18,32 @@ type CardState = {
 
 type GameGridProps = {
   setScore: (mov: number) => void;
+  endGame: () => void;
 };
 
-const items = [1, 2, 3, 4, 5, 6, 7, 8];
+const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const allItems = shuffle([...items, ...items]);
+
+function chunkArray<T>(array: T[], chunkSize: number): T[][] {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    chunks.push(array.slice(i, i + chunkSize));
+  }
+  return chunks;
+}
+const chunkedItems = chunkArray(allItems, 4);
+
 const defaultState: CardState = {
   index: null,
   value: null,
 };
 
-const GameGrid = ({ setScore }: GameGridProps) => {
+interface RotationState {
+  x: number;
+  y: number;
+}
+
+const GameGrid = ({ setScore, endGame }: GameGridProps) => {
   const [firstCard, setFirstCard] = useState<CardState>(defaultState);
   const [secondCard, setSecondCard] = useState<CardState>(defaultState);
   const [remainingCards, setRemainingCards] = useState<number[]>(items);
@@ -29,10 +52,6 @@ const GameGrid = ({ setScore }: GameGridProps) => {
   const timer = useRef<NodeJS.Timer | number | null>(null);
 
   const handleClick = (index: number, value: number) => {
-    // if (timer.current !== null) {
-    //   clearTimeout(Number(timer.current));
-    // }
-
     if (
       firstCard.index === null ||
       (firstCard.index !== null && secondCard.index !== null)
@@ -45,7 +64,11 @@ const GameGrid = ({ setScore }: GameGridProps) => {
       setMoves((prev) => prev + 1);
 
       if (firstCard.value === value) {
-        setRemainingCards(remainingCards.filter((card) => card !== value));
+        setTimeout(
+          () =>
+            setRemainingCards(remainingCards.filter((card) => card !== value)),
+          500
+        );
       }
     }
   };
@@ -54,7 +77,7 @@ const GameGrid = ({ setScore }: GameGridProps) => {
     if (moves > -1) {
       setScore(Constants.gameCells - remainingCards.length);
     }
-  }, [moves]);
+  }, [moves, remainingCards.length, setScore]);
 
   useEffect(() => {
     if (
@@ -70,48 +93,190 @@ const GameGrid = ({ setScore }: GameGridProps) => {
     }
   }, [firstCard, secondCard]);
 
+  // Cube's logic:
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [rotation, setRotation] = useState<RotationState>({ x: -30, y: -45 });
+  const lastMousePosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const rotateRef = useRef<NodeJS.Timer | number | null>();
+
+  const handleInteractionStart = () => {
+    console.log("clear ");
+    clearInterval(Number(rotateRef.current)); // Stop rotation when user interacts
+  };
+
+  useEffect(() => {
+    rotateRef.current = setInterval(() => {
+      setRotation((prev) => ({
+        x: prev.x,
+        y: prev.y + 1, // Adjust this value for different speed or direction
+      }));
+    }, 100); // Adjust interval for smoother or faster rotation
+
+    return () => clearInterval(Number(rotateRef.current));
+  }, []);
+
+  const handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
+    handleInteractionStart();
+    e.preventDefault();
+    setIsDragging(true);
+    lastMousePosition.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    console.log("aaa");
+    const dx = e.clientX - lastMousePosition.current.x;
+    const dy = e.clientY - lastMousePosition.current.y;
+    setRotation((rotation) => ({
+      x: rotation.x - dy * 0.5, // Adjust rotation sensitivity here
+      y: rotation.y + dx * 0.5,
+    }));
+    lastMousePosition.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleMouseUp = () => {
+    console.log("stop up");
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    if (remainingCards.length <= 0) endGame();
+  }, [remainingCards.length]);
+
   return (
     <div className="game-grid">
-      {remainingCards.length > 0 ? "Remaining cards: " : "Victory!"}
-      <div className="game-grid__remaining">
-        {remainingCards.map((card, index) => {
-          return (
+      <div className="game-grid__header">
+        <p>Remaining cards:</p>
+        <div className="game-grid__remaining">
+          {remainingCards.map((card, index) => (
             <img
-              key={index}
-              alt={`ncoded ${index}`}
+              key={`${card}_${index}`}
+              alt={`ncoded logo ${index}`}
               src={`ncoded${card}.png`}
             />
-          );
-        })}
+          ))}
+        </div>
       </div>
-      <div className="game-grid__cards-container">
-        {allItems.map((item, index) => {
-          return (
-            <Card 
-              index={index}
-              firstCardIndex={firstCard?.index}
-              secondCardIndex={secondCard?.index}
-              remainingCards={remainingCards}
-              item={item}
-              handleClick={handleClick}
-              />
-            // <div
-            //   key={index}
-            //   className={`card ${
-            //     (firstCard.index === index ||
-            //       secondCard.index === index ||
-            //       !remainingCards.includes(item)) &&
-            //     "flipped"
-            //   }`}
-            //   onClick={() => handleClick(index, item)}
-            // >
-            //   <div className="back-side"></div>
-            //   <img alt={`ncoded ${index}`} src={`ncoded${item}.png`} />
-            // </div>
-          );
-        })}
+      <div className="game-grid__cube">
+        <div
+          className="cube"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          
+          onPointerDown={handleMouseDown}
+          onPointerMove={handleMouseMove}
+          onPointerUp={handleMouseUp}
+          onPointerLeave={handleMouseUp}
+
+          style={{
+            transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
+          }}
+        >
+          <div className="face front">
+            <div className="game-grid__cards-container">
+              {chunkedItems[0].map((item, index) => {
+                return (
+                  <Card
+                    index={index}
+                    firstCardIndex={firstCard?.index}
+                    secondCardIndex={secondCard?.index}
+                    remainingCards={remainingCards}
+                    item={item}
+                    handleClick={handleClick}
+                  />
+                );
+              })}
+            </div>
+          </div>
+          <div className="face back">
+            <div className="game-grid__cards-container">
+              {chunkedItems[1].map((item, index) => {
+                return (
+                  <Card
+                    index={index + 1 * 4}
+                    firstCardIndex={firstCard?.index}
+                    secondCardIndex={secondCard?.index}
+                    remainingCards={remainingCards}
+                    item={item}
+                    handleClick={handleClick}
+                  />
+                );
+              })}
+            </div>
+          </div>
+          <div className="face right">
+            <div className="game-grid__cards-container">
+              {chunkedItems[2].map((item, index) => {
+                return (
+                  <Card
+                    index={index + 2 * 4}
+                    firstCardIndex={firstCard?.index}
+                    secondCardIndex={secondCard?.index}
+                    remainingCards={remainingCards}
+                    item={item}
+                    handleClick={handleClick}
+                  />
+                );
+              })}
+            </div>
+          </div>
+          <div className="face left">
+            <div className="game-grid__cards-container">
+              {chunkedItems[3].map((item, index) => {
+                return (
+                  <Card
+                    index={index + 3 * 4}
+                    firstCardIndex={firstCard?.index}
+                    secondCardIndex={secondCard?.index}
+                    remainingCards={remainingCards}
+                    item={item}
+                    handleClick={handleClick}
+                  />
+                );
+              })}
+            </div>
+          </div>
+          <div className="face top">
+            <div className="game-grid__cards-container">
+              {chunkedItems[4].map((item, index) => {
+                return (
+                  <Card
+                    index={index + 4 * 4}
+                    firstCardIndex={firstCard?.index}
+                    secondCardIndex={secondCard?.index}
+                    remainingCards={remainingCards}
+                    item={item}
+                    handleClick={handleClick}
+                  />
+                );
+              })}
+            </div>
+          </div>
+          <div className="face bottom">
+            <div className="game-grid__cards-container">
+              {chunkedItems[5].map((item, index) => {
+                return (
+                  <Card
+                    index={index + 5 * 4}
+                    firstCardIndex={firstCard?.index}
+                    secondCardIndex={secondCard?.index}
+                    remainingCards={remainingCards}
+                    item={item}
+                    handleClick={handleClick}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </div>
-      Moves used: {moves}
+      <div className="game-grid__results">
+        <div>Moves used: {moves}</div>
+        <div>Matches: {Constants.gameCells - remainingCards.length}</div>
+      </div>
     </div>
   );
 };
