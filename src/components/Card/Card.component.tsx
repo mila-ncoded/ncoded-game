@@ -38,19 +38,19 @@ const Card = (props: CardProps) => {
       <div className={classNames(["ng-cube__side", "ng-cube__side__front"])}>
         <img
           alt="falcon"
-          src="falcon-logo.png"
+          src="back.png"
         />
       </div>
-      <div className={classNames(["ng-cube__side", "ng-cube__side__right"])} />
+      {/* <div className={classNames(["ng-cube__side", "ng-cube__side__right"])} /> */}
       <div className={classNames(["ng-cube__side", "ng-cube__side__back"])}>
         <img
           alt={`ncoded ${index}`}
           src={`ncoded${item}.png`}
         />
       </div>
-      <div className={classNames(["ng-cube__side", "ng-cube__side__left"])} />
-      <div className={classNames(["ng-cube__side", "ng-cube__side__up"])} />
-      <div className={classNames(["ng-cube__side", "ng-cube__side__down"])} />
+      {/* <div className={classNames(["ng-cube__side", "ng-cube__side__left"])} /> */}
+      {/* <div className={classNames(["ng-cube__side", "ng-cube__side__up"])} /> */}
+      {/* <div className={classNames(["ng-cube__side", "ng-cube__side__down"])} /> */}
     </div>
   );
 };

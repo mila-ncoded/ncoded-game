@@ -1,0 +1,31 @@
+@use 'breakpoints';
+
+@mixin xs-breakpoint {
+  @media only screen and (max-width: breakpoints.$xsBreakpoint) {
+    @content;
+  }
+}
+
+@mixin sm-breakpoint {
+  @media only screen and (max-width: breakpoints.$smBreakpoint) {
+    @content;
+  }
+}
+
+@mixin md-breakpoint {
+  @media only screen and (max-width: breakpoints.$mdBreakpoint) {
+    @content;
+  }
+}
+
+@mixin lg-breakpoint {
+  @media only screen and (max-width: breakpoints.$lgBreakpoint) {
+    @content;
+  }
+}
+
+@mixin xl-breakpoint {
+  @media only screen and (max-width: breakpoints.$xlBreakpoint) {
+    @content;
+  }
+}

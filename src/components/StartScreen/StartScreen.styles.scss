@@ -1,11 +1,19 @@
+@import "src/scss/breakpoints.module.scss";
+@import "src/scss/flex.module.scss";
+
 .description + .action {
   margin-top: 1em;
 }
 
 .intro {
+  @include flex(column, center, center);
+
   img {
     width: 800px;
     padding-bottom: 64px;
+    @include sm-breakpoint {
+      width: 400px;
+    }
   }
 }
 

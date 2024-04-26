@@ -6,10 +6,10 @@ type ScoreCardProps = {
   time: number;
 };
 
-const ScoreCard = ({ score, time }: ScoreCardProps) => {
+const ScoreCard = ({ score = 0, time }: ScoreCardProps) => {
   return (
     <div className="game-score">
-      {score} matches / {time}s remaining
+      {time}s remaining
     </div>
   );
 };

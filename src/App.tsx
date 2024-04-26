@@ -5,11 +5,7 @@ import Constants from "./utils/constants";
 import "./App.css";
 
 function App() {
-  return (
-    <div className="App">
-      <Game gameDuration={Constants.gameDuration} />
-    </div>
-  );
+  return <Game gameDuration={Constants.gameDuration} />;
 }
 
 export default App;
